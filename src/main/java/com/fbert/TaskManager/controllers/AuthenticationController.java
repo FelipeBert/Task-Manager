@@ -3,6 +3,7 @@ package com.fbert.TaskManager.controllers;
 import com.fbert.TaskManager.dto.AuthenticationDTO;
 import com.fbert.TaskManager.dto.LoginResponseDTO;
 import com.fbert.TaskManager.dto.RegisterDTO;
+import com.fbert.TaskManager.dto.UserRegisterDTO;
 import com.fbert.TaskManager.entity.user.User;
 import com.fbert.TaskManager.infraestructure.security.TokenService;
 import com.fbert.TaskManager.repository.UserRepository;
@@ -37,13 +38,25 @@ public class AuthenticationController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO){
+    @PostMapping("/register/admin")
+    public ResponseEntity registerAdmin(@RequestBody @Valid RegisterDTO registerDTO){
         if(this.userRepository.findByLogin(registerDTO.login()) != null){
             return ResponseEntity.badRequest().build();
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
         User user = new User(registerDTO.login(), encryptedPassword, registerDTO.role());
+
+        this.userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody @Valid UserRegisterDTO userRegisterDTO){
+        if(this.userRepository.findByLogin(userRegisterDTO.getLogin()) != null){
+            return ResponseEntity.badRequest().build();
+        }
+        String encryptedPassword = new BCryptPasswordEncoder().encode(userRegisterDTO.getPassword());
+        User user = new User(userRegisterDTO.getLogin(), encryptedPassword, userRegisterDTO.getRole());
 
         this.userRepository.save(user);
         return ResponseEntity.ok().build();
