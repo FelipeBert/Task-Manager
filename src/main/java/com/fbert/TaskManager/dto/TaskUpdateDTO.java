@@ -8,12 +8,12 @@ public class TaskUpdateDTO {
     private Long id;
     private String descricao;
     private String titulo;
-    private String tarefaStatus;
+    private TarefaStatus tarefaStatus;
 
-    public TaskUpdateDTO(Long id, String descricao, String titulo, TarefaStatus tarefaStatus){
+    public TaskUpdateDTO(Long id, String titulo, String descricao, String tarefaStatus){
         this.id = id;
-        this.descricao = descricao;
         this.titulo = titulo;
-        this.tarefaStatus = String.valueOf(tarefaStatus);
+        this.descricao = descricao;
+        this.tarefaStatus = TarefaStatus.valueOf(tarefaStatus);
     }
 }

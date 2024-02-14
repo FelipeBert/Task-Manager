@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TarefasService{
 
     @Autowired
     private TarefaRepository tarefaRepository;
+
 
     public Tarefa createTarefa(TaskDTO taskDTO){
         Tarefa tarefa = new Tarefa(taskDTO);
@@ -33,6 +35,11 @@ public class TarefasService{
         this.tarefaRepository.deleteById(id);
     }
 
+    public void deleteTask(Tarefa tarefa){
+        this.tarefaRepository.delete(tarefa);
+    }
+
+
     public Tarefa atualizarTarefa(TaskUpdateDTO taskUpdateDTO) throws Exception {
         Tarefa tarefaExistente = tarefaRepository.findById(taskUpdateDTO.getId())
                 .orElseThrow(() -> new Exception("Tarefa não encontrada!"));
@@ -44,7 +51,7 @@ public class TarefasService{
             tarefaExistente.setDescricao(taskUpdateDTO.getDescricao());
         }
         if(taskUpdateDTO.getTarefaStatus() != null){
-            tarefaExistente.setTarefaStatus(TarefaStatus.valueOf(taskUpdateDTO.getTarefaStatus()));
+            tarefaExistente.setTarefaStatus(TarefaStatus.valueOf(String.valueOf(taskUpdateDTO.getTarefaStatus())));
         }
         this.tarefaRepository.save(tarefaExistente);
         return tarefaExistente;
