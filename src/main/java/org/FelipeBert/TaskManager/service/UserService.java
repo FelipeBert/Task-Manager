@@ -8,4 +8,5 @@ import org.FelipeBert.TaskManager.model.User;
 public interface UserService {
     public UserDto create(UserRegisterDto userRegisterDto);
     public UserDto updatePassword(UpdatePasswordDto updatePasswordDto, User user);
+    void validateActivationToken(String token);
 }

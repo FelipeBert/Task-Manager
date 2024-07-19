@@ -4,12 +4,10 @@ import org.FelipeBert.TaskManager.dtos.TaskDtos.TaskCreationDto;
 import org.FelipeBert.TaskManager.dtos.TaskDtos.TaskDeleteDto;
 import org.FelipeBert.TaskManager.dtos.TaskDtos.TaskDto;
 import org.FelipeBert.TaskManager.dtos.TaskDtos.TaskUpdateDto;
-import org.FelipeBert.TaskManager.exceptions.TaskNotFoundException;
-import org.FelipeBert.TaskManager.exceptions.CannotDeleteTaskException;
-import org.FelipeBert.TaskManager.exceptions.UserIdDoesNotMatchException;
-import org.FelipeBert.TaskManager.exceptions.UserNotFoundException;
+import org.FelipeBert.TaskManager.exceptions.*;
 import org.FelipeBert.TaskManager.model.Task;
 import org.FelipeBert.TaskManager.model.User;
+import org.FelipeBert.TaskManager.model.enums.UserStatus;
 import org.FelipeBert.TaskManager.repository.TaskRepository;
 import org.FelipeBert.TaskManager.repository.UserRepository;
 import org.FelipeBert.TaskManager.service.TaskService;
@@ -31,6 +29,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto create(TaskCreationDto creationDto, User user) {
+        if(user.getUserStatus() == UserStatus.INACTIVE){
+            throw new AccountNotActivatedException();
+        }
         if(!user.getId().equals(creationDto.getUserId())){
             throw new UserIdDoesNotMatchException();
         }
@@ -58,6 +59,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getAllTasksByUserId(String id, User user) {
+        if(user.getUserStatus() == UserStatus.INACTIVE){
+            throw new AccountNotActivatedException();
+        }
         if(id == null){
             throw new UserIdDoesNotMatchException();
         }
@@ -80,6 +84,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto updateTask(TaskUpdateDto taskUpdateDto, User user) {
+        if(user.getUserStatus() == UserStatus.INACTIVE){
+            throw new AccountNotActivatedException();
+        }
         if(!user.getId().equals(taskUpdateDto.getUserId())){
             throw new UserIdDoesNotMatchException();
         }
@@ -117,6 +124,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(TaskDeleteDto taskDeleteDto, User user) {
+        if(user.getUserStatus() == UserStatus.INACTIVE){
+            throw new AccountNotActivatedException();
+        }
         if(!user.getId().equals(taskDeleteDto.userId())){
             throw new UserIdDoesNotMatchException();
         }

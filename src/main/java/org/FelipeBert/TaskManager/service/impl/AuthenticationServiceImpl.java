@@ -40,8 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public TokenResponseDto getToken(AuthDto authDto){
-        User optionalUser = userRepository.findByLogin(authDto.login()).orElseThrow(UserNotFoundException::new);
-
+        User optionalUser = userRepository.findByLogin(authDto.getLogin()).orElseThrow(UserNotFoundException::new);
         return TokenResponseDto.builder().token(generateToken(optionalUser, tokenExpirationTime))
                 .refreshToken(generateToken(optionalUser, tokenExpirationRefresh))
                 .build();
@@ -74,6 +73,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }catch (JWTVerificationException e){
             throw new RuntimeException("Erro ao tentar validar o token! " + e.getMessage());
         }
+    }
+
+    @Override
+    public String generateActivationToken(User user) {
+        return generateToken(user, 15);
     }
 
     @Override
