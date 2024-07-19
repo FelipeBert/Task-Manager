@@ -41,4 +41,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex){
         return ResponseEntity.badRequest().body("User Not Found!");
     }
+
+    @ExceptionHandler(AccountNotActivatedException.class)
+    public ResponseEntity<String> handleAccountNotActivatedException(AccountNotActivatedException ex){
+        return ResponseEntity.badRequest().body("Account Not Activated!");
+    }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<String> handleTokenNotFoundException(TokenNotFoundException ex){
+        return ResponseEntity.badRequest().body("Token not found or Expired!");
+    }
 }
