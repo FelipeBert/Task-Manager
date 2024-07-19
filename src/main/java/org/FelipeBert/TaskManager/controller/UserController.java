@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import org.FelipeBert.TaskManager.dtos.UserDtos.UpdatePasswordDto;
 import org.FelipeBert.TaskManager.dtos.UserDtos.UserDto;
 import org.FelipeBert.TaskManager.dtos.UserDtos.UserRegisterDto;
-import org.FelipeBert.TaskManager.exceptions.UserNotFoundException;
 import org.FelipeBert.TaskManager.model.User;
 import org.FelipeBert.TaskManager.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +53,12 @@ public class UserController {
         else{
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<Void> activateAccount(@RequestParam String token){
+        userService.validateActivationToken(token);
+        return ResponseEntity.ok().body(null);
     }
 
     private boolean isUserAuthenticated(){

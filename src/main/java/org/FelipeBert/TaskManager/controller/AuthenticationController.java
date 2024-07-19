@@ -11,10 +11,7 @@ import org.FelipeBert.TaskManager.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,7 +34,7 @@ public class AuthenticationController {
     })
     @PostMapping
     public ResponseEntity<TokenResponseDto> authenticate(@RequestBody @Valid AuthDto authDto){
-        var userAuthentication = new UsernamePasswordAuthenticationToken(authDto.login(), authDto.password());
+        var userAuthentication = new UsernamePasswordAuthenticationToken(authDto.getLogin(), authDto.getPassword());
         authenticationManager.authenticate(userAuthentication);
         return ResponseEntity.ok(authenticationService.getToken(authDto));
     }
@@ -51,7 +48,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Error validating token"),
     })
     @PostMapping("/refresh-token")
-    public ResponseEntity<TokenResponseDto> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto){
+    public ResponseEntity<TokenResponseDto> refreshToken(@RequestBody @Valid RefreshTokenDto refreshTokenDto){
         return ResponseEntity.ok(authenticationService.getRefreshedToken(refreshTokenDto.refreshToken()));
     }
 }

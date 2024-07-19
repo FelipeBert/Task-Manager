@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/user").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/user/activate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/task").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/task").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/task").authenticated()
